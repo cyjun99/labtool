@@ -899,10 +899,11 @@ void UiAnalogSignal::findIntersect(UiAnalogSignalPrivate* signal, double time,
 UiAnalogSignalPrivate* UiAnalogSignal::findSignal(QPoint pxPoint)
 {
     qreal ix = -1;
+    UiAnalogSignalPrivate* result = NULL;
 
     if (mSignals.size() == 0) return NULL;
 
-    QPointF intersect[mSignals.size()];
+    QPointF *intersect = new QPointF[mSignals.size()];
 
     double time = mTimeAxis->pixelToTimeRelativeRef(pxPoint.x());
 
@@ -914,8 +915,10 @@ UiAnalogSignalPrivate* UiAnalogSignal::findSignal(QPoint pxPoint)
     }
 
     // no intersect found
-    if (ix == -1) return NULL;
-
+    if (ix == -1) {
+        delete intersect;
+        return NULL;
+    }
 
     // calculate distance to pxPoint
     double dist[mSignals.size()];
@@ -935,7 +938,6 @@ UiAnalogSignalPrivate* UiAnalogSignal::findSignal(QPoint pxPoint)
     }
 
     // find signal with smallest distance
-    UiAnalogSignalPrivate* result = NULL;
     double resultDist = 12345678;
     for (int i = 0; i < mSignals.size(); i++) {
 
@@ -944,7 +946,7 @@ UiAnalogSignalPrivate* UiAnalogSignal::findSignal(QPoint pxPoint)
             result = mSignals.at(i);
         }
     }
-
+    delete intersect;
     return result;
 }
 
@@ -978,7 +980,7 @@ void UiAnalogSignal::paintSignalValue(QPainter* painter, double time)
     QList<double> pk;
 
 
-    QPointF intersect[mSignals.size()];
+    QPointF *intersect = new QPointF[mSignals.size()];
 
     for (int i = 0; i < mSignals.size(); i++) {
         UiAnalogSignalPrivate* p = mSignals.at(i);
@@ -988,11 +990,17 @@ void UiAnalogSignal::paintSignalValue(QPainter* painter, double time)
         if (intersect[i].x() != -1) ix = intersect[i].x();
     }
 
-    if (ix == -1) return;
+    if (ix == -1) {
+        delete intersect;
+        return;
+    }
 
     double xPix = mTimeAxis->timeToPixelRelativeRef(ix);
 
-    if (xPix < plotX()) return;
+    if (xPix < plotX()) {
+        delete intersect;
+        return;
+    }
 
     for (int i = 0; i < mSignals.size(); i++) {
         UiAnalogSignalPrivate* p = mSignals.at(i);
@@ -1017,8 +1025,9 @@ void UiAnalogSignal::paintSignalValue(QPainter* painter, double time)
             pk.append(p->calcPeakToPeak());
         }
     }
-
     emit measurmentChanged(level, pk, true);
+ ret:
+    delete intersect;
 }
 
 /*!
