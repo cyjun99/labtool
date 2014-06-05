@@ -158,6 +158,7 @@ RC_FILE = icon.rc
 INCLUDEPATH += .
 win32:CONFIG(release, debug|release): LIBS += -L$$PWD/libusbx/MinGW32/dll/ -lusb-1.0
 else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/libusbx/MinGW32/dll/ -lusb-1.0
+else:mac: LIBS += -L/usr/local/Cellar/libusb/1.0.18/lib -lusb-1.0 -lobjc -Wl,-framework,IOKit -Wl,-framework,CoreFoundation
 else:unix:!symbian: LIBS += -L$$PWD/libusbx/Linux/ -lusb-1.0 -ludev
 
 INCLUDEPATH += $$PWD/libusbx/MS32/dll
