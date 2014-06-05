@@ -174,5 +174,7 @@ mac {
     #DFU_UTIL.files = /usr/local/bin/dfu-util
     DFU_UTIL.files = ../tools/dfu-util-0.7-binaries/darwin-universal/dfu-util
     DFU_UTIL.path = Contents/MacOS
-    QMAKE_BUNDLE_DATA += FIRMWARE_BIN DFU_UTIL
+    LIBUSB.files = ../tools/dfu-util-0.7-binaries/darwin-universal/libusb-1.0.0.dylib
+    LIBUSB.path = Contents/MacOS
+    QMAKE_BUNDLE_DATA += FIRMWARE_BIN DFU_UTIL LIBUSB
 }
