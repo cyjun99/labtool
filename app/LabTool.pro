@@ -165,3 +165,14 @@ INCLUDEPATH += $$PWD/libusbx/MS32/dll
 DEPENDPATH += $$PWD/libusbx/MS32/dll
 
 QT += widgets
+
+mac {
+    ICON = resources/oscilloscope.icns
+
+    FIRMWARE_BIN.files = ../firmware.bin
+    FIRMWARE_BIN.path = Contents/Resources
+    #DFU_UTIL.files = /usr/local/bin/dfu-util
+    DFU_UTIL.files = ../tools/dfu-util-0.7-binaries/darwin-x86_64/dfu-util
+    DFU_UTIL.path = Contents/MacOS
+    QMAKE_BUNDLE_DATA += FIRMWARE_BIN DFU_UTIL
+}
