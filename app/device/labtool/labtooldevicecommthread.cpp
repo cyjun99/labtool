@@ -204,7 +204,8 @@ void LabToolDeviceCommThread::runDFU()
 
 #ifdef Q_OS_MACX
     QString appPath = QCoreApplication::applicationDirPath();
-    QString program = appPath + "dfu-util";
+    QString program = appPath + "/dfu-util";
+    qDebug("DFU program %s", qPrintable(program));
 #else
 #ifdef Q_OS_WIN
     QString program = "tools/dfu-util-0.7-binaries/win32-mingw32/dfu-util-static.exe";
